@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>粒子形状变换 V7</title>
+    <title>Particle Shape Transformation V7</title>
     <style>
         body { margin: 0; overflow: hidden; background-color: #000; color: #fff; font-family: Arial, sans-serif; }
         #info {
@@ -87,7 +87,7 @@
 </head>
 <body>
     <div class="top-bar">
-        欢迎，{{ username }}！<a href="{{ url_for('logout') }}">登出</a>
+        Welcome, {{ username }}！<a href="{{ url_for('logout') }}">Logout</a>
     </div>
     <div id="info" style="top: 60px;">Shape: <span id="shapeName">Sphere</span> <span id="morphingStatus"></span></div>
     <canvas id="particleCanvas"></canvas>

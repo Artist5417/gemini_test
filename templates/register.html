@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>注册</title>
+    <title>Register</title>
     <style>
         body {
             margin: 0;
@@ -100,23 +100,23 @@
 <body>
     <canvas id="bg-particles"></canvas>
     <div class="register-container" id="registerBox">
-        <div class="register-title">注册</div>
+        <div class="register-title">Register</div>
         <form method="post">
             <div class="input-group">
                 <span class="icon"><i class="fa fa-user"></i></span>
-                <input type="text" name="username" placeholder="请输入用户名" required>
+                <input type="text" name="username" placeholder="Enter username" required>
             </div>
             <div class="input-group">
                 <span class="icon"><i class="fa fa-envelope"></i></span>
-                <input type="email" name="email" placeholder="请输入邮箱" required>
+                <input type="email" name="email" placeholder="Enter email" required>
             </div>
             <div class="input-group">
                 <span class="icon"><i class="fa fa-lock"></i></span>
-                <input type="password" name="password" placeholder="请输入密码" required>
+                <input type="password" name="password" placeholder="Enter password" required>
             </div>
             <div class="input-group">
                 <span class="icon"><i class="fa fa-lock"></i></span>
-                <input type="password" name="confirm" placeholder="请确认密码" required>
+                <input type="password" name="confirm" placeholder="Confirm password" required>
             </div>
             {% with messages = get_flashed_messages() %}
               {% if messages %}
@@ -127,14 +127,14 @@
                 </div>
               {% endif %}
             {% endwith %}
-            <button type="submit" class="register-btn">注册</button>
+            <button type="submit" class="register-btn">Register</button>
         </form>
         <div class="login-link">
-            已有账号？<a href="{{ url_for('login') }}">去登录</a>
+            Already have an account? <a href="{{ url_for('login') }}">Login Here</a>
         </div>
     </div>
     <script>
-    // 亮蓝色和紫色粒子动画，分布在除注册框以外的所有区域
+    // Bright blue and purple particle animation, distributed in all areas except the registration box
     const canvas = document.getElementById('bg-particles');
     const ctx = canvas.getContext('2d');
     let w = window.innerWidth, h = window.innerHeight;
@@ -188,7 +188,7 @@
         for (let p of particles) {
             p.x += p.dx;
             p.y += p.dy;
-            // 保证粒子不会进入注册框区域
+            // Ensure particles do not enter the registration box area
             if (
                 p.x < 0 || p.x > w || p.y < 0 || p.y > h ||
                 (p.x > box.left - 20 && p.x < box.right + 20 && p.y > box.top - 20 && p.y < box.bottom + 20)
