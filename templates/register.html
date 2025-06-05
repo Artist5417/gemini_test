@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #0a0f2a 0%, #1a1a4a 100%);
+            overflow: hidden;
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+        }
+        .register-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(40, 30, 60, 0.95);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px 0 rgba(0,0,0,0.25);
+            padding: 40px 38px 30px 38px;
+            width: 370px;
+            z-index: 2;
+        }
+        .register-title {
+            text-align: center;
+            font-size: 2rem;
+            color: #33ccff;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+        .input-group {
+            position: relative;
+            margin-bottom: 22px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px 40px 12px 40px;
+            border: none;
+            border-radius: 8px;
+            background: #3a2a5a;
+            color: #fff8e1;
+            font-size: 1rem;
+            outline: none;
+            box-sizing: border-box;
+        }
+        .input-group .icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #33ccff;
+            font-size: 1.2rem;
+        }
+        .input-group input:focus {
+            background: #4a3a6a;
+            border: 1.5px solid #33ccff;
+        }
+        .register-btn {
+            width: 100%;
+            padding: 13px 0;
+            background: linear-gradient(90deg, #b347ff 0%, #33ccff 100%);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-bottom: 10px;
+        }
+        .register-btn:hover {
+            background: linear-gradient(90deg, #8a30cc 0%, #1a99cc 100%);
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 10px;
+            color: #fff8e1;
+        }
+        .login-link a {
+            color: #33ccff;
+            text-decoration: underline;
+        }
+        .error-message {
+            color: #ff4444;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        #bg-particles {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <canvas id="bg-particles"></canvas>
+    <div class="register-container" id="registerBox">
+        <div class="register-title">注册</div>
+        <form method="post">
+            <div class="input-group">
+                <span class="icon"><i class="fa fa-user"></i></span>
+                <input type="text" name="username" placeholder="请输入用户名" required>
+            </div>
+            <div class="input-group">
+                <span class="icon"><i class="fa fa-envelope"></i></span>
+                <input type="email" name="email" placeholder="请输入邮箱" required>
+            </div>
+            <div class="input-group">
+                <span class="icon"><i class="fa fa-lock"></i></span>
+                <input type="password" name="password" placeholder="请输入密码" required>
+            </div>
+            <div class="input-group">
+                <span class="icon"><i class="fa fa-lock"></i></span>
+                <input type="password" name="confirm" placeholder="请确认密码" required>
+            </div>
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <div class="error-message">
+                {% for message in messages %}
+                  {{ message }}<br>
+                {% endfor %}
+                </div>
+              {% endif %}
+            {% endwith %}
+            <button type="submit" class="register-btn">注册</button>
+        </form>
+        <div class="login-link">
+            已有账号？<a href="{{ url_for('login') }}">去登录</a>
+        </div>
+    </div>
+    <script>
+    // 亮蓝色和紫色粒子动画，分布在除注册框以外的所有区域
+    const canvas = document.getElementById('bg-particles');
+    const ctx = canvas.getContext('2d');
+    let w = window.innerWidth, h = window.innerHeight;
+    canvas.width = w; canvas.height = h;
+    let particles = [];
+    const colors = ['#b347ff', '#33ccff', '#fff8e1', '#ffd700', '#ffae42'];
+    const num = 700;
+    function random(min, max) { return Math.random() * (max - min) + min; }
+    function getRegisterBoxRect() {
+        const box = document.getElementById('registerBox');
+        const rect = box.getBoundingClientRect();
+        return {left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom};
+    }
+    function createParticle() {
+        let x, y, tries = 0;
+        let box = getRegisterBoxRect();
+        do {
+            x = random(0, w);
+            y = random(0, h);
+            tries++;
+        } while (
+            x > box.left - 20 && x < box.right + 20 &&
+            y > box.top - 20 && y < box.bottom + 20 && tries < 10
+        );
+        return {
+            x,
+            y,
+            r: random(0.5, 1.3),
+            color: colors[Math.floor(Math.random() * colors.length)],
+            alpha: random(0.4, 0.9),
+            dx: random(-0.12, 0.12),
+            dy: random(-0.12, 0.12)
+        };
+    }
+    function draw() {
+        ctx.clearRect(0, 0, w, h);
+        for (let p of particles) {
+            ctx.save();
+            ctx.globalAlpha = p.alpha;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
+            ctx.fillStyle = p.color;
+            ctx.shadowColor = p.color;
+            ctx.shadowBlur = 10;
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+    function update() {
+        const box = getRegisterBoxRect();
+        for (let p of particles) {
+            p.x += p.dx;
+            p.y += p.dy;
+            // 保证粒子不会进入注册框区域
+            if (
+                p.x < 0 || p.x > w || p.y < 0 || p.y > h ||
+                (p.x > box.left - 20 && p.x < box.right + 20 && p.y > box.top - 20 && p.y < box.bottom + 20)
+            ) {
+                Object.assign(p, createParticle());
+            }
+        }
+    }
+    function loop() {
+        draw();
+        update();
+        requestAnimationFrame(loop);
+    }
+    function resize() {
+        w = window.innerWidth;
+        h = window.innerHeight;
+        canvas.width = w;
+        canvas.height = h;
+    }
+    window.addEventListener('resize', resize);
+    window.onload = () => {
+        particles = Array.from({length: num}, createParticle);
+        loop();
+    };
+    </script>
+</body>
+</html> 
